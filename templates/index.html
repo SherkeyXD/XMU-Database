@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+
+{% block title %}首页 - 学生成绩管理系统{% endblock %}
+
+{% block content %}
+<!-- 欢迎卡片 -->
+<div class="glass-effect rounded-2xl shadow-2xl p-8 mb-8">
+    <div class="text-center">
+        <h2 class="text-3xl font-bold text-gray-800 mb-4">欢迎使用学生成绩管理系统</h2>
+        <p class="text-lg text-gray-600 mb-8">这是一个现代化的学生成绩管理平台，为学生和教师提供便捷的成绩查询和管理服务。</p>
+        
+        {% if not session.user_id %}
+        <a href="{{ url_for('login_page') }}" 
+           class="inline-block gradient-bg text-white px-8 py-3 rounded-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+            登录系统
+        </a>
+        {% else %}
+        <a href="{{ url_for('dashboard') }}" 
+           class="inline-block gradient-bg text-white px-8 py-3 rounded-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+            进入控制台
+        </a>
+        {% endif %}
+    </div>
+</div>
+
+<!-- 留言板 -->
+<div class="glass-effect rounded-2xl shadow-2xl p-8">
+    <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+        <svg class="w-6 h-6 mr-2 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-3.582 8-8 8a8.959 8.959 0 01-4.906-1.518L3 21l1.518-5.094A8.959 8.959 0 013 12c0-4.418 3.582-8 8-8s8 3.582 8 8z"></path>
+        </svg>
+        留言板
+    </h3>
+    
+    <!-- 留言列表 -->
+    <div id="comments-section" class="mb-8">
+        <div id="comments-list" class="space-y-4"></div>
+        <div id="pagination" class="flex justify-center items-center space-x-4 mt-6"></div>
+    </div>
+    
+    <!-- 发表留言 -->
+    <div class="border-t border-gray-200 pt-8">
+        <h4 class="text-xl font-semibold text-gray-800 mb-4">发表留言</h4>
+        <form id="comment-form" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="comment-name" class="block text-sm font-medium text-gray-700 mb-2">姓名</label>
+                    <input type="text" id="comment-name" maxlength="50" required
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all">
+                </div>
+            </div>
+            
+            <div>
+                <label for="comment-content" class="block text-sm font-medium text-gray-700 mb-2">留言内容</label>
+                <textarea id="comment-content" rows="4" maxlength="500" required
+                          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none"></textarea>
+            </div>
+            
+            <button type="submit" 
+                    class="gradient-bg text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+                发表留言
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let currentPage = 0;
+const commentsPerPage = 5;
+
+// 加载留言
+function loadComments(page = 0) {
+    const offset = page * commentsPerPage;
+    makeRequest(`/api/comments?limit=${commentsPerPage}&offset=${offset}`, 'GET', null, function(data) {
+        const commentsList = document.getElementById('comments-list');
+        commentsList.innerHTML = '';
+        
+        if (data.comments && data.comments.length > 0) {
+            data.comments.forEach(comment => {
+                const commentDiv = document.createElement('div');
+                commentDiv.className = 'bg-gray-50 border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow';
+                commentDiv.innerHTML = `
+                    <div class="flex justify-between items-start mb-2">
+                        <div class="font-semibold text-primary">${comment.name}</div>
+                        <div class="text-sm text-gray-500">${comment.timestamp}</div>
+                    </div>
+                    <div class="text-gray-700">${comment.content}</div>
+                `;
+                commentsList.appendChild(commentDiv);
+            });
+        } else {
+            commentsList.innerHTML = '<p class="text-center text-gray-500 py-8">暂无留言</p>';
+        }
+        
+        updatePagination();
+    });
+}
+
+// 更新分页
+function updatePagination() {
+    makeRequest('/api/comments/count', 'GET', null, function(data) {
+        const totalPages = Math.ceil(data.total / commentsPerPage);
+        const pagination = document.getElementById('pagination');
+        pagination.innerHTML = '';
+        
+        if (totalPages > 1) {
+            if (currentPage > 0) {
+                const prevBtn = document.createElement('button');
+                prevBtn.textContent = '上一页';
+                prevBtn.className = 'px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors';
+                prevBtn.onclick = () => {
+                    currentPage--;
+                    loadComments(currentPage);
+                };
+                pagination.appendChild(prevBtn);
+            }
+            
+            const pageInfo = document.createElement('span');
+            pageInfo.textContent = `第 ${currentPage + 1} 页，共 ${totalPages} 页`;
+            pageInfo.className = 'text-white font-medium';
+            pagination.appendChild(pageInfo);
+            
+            if (currentPage < totalPages - 1) {
+                const nextBtn = document.createElement('button');
+                nextBtn.textContent = '下一页';
+                nextBtn.className = 'px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors';
+                nextBtn.onclick = () => {
+                    currentPage++;
+                    loadComments(currentPage);
+                };
+                pagination.appendChild(nextBtn);
+            }
+        }
+    });
+}
+
+// 发表留言
+document.getElementById('comment-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const name = document.getElementById('comment-name').value.trim();
+    const content = document.getElementById('comment-content').value.trim();
+    
+    if (!name || !content) {
+        showAlert('请填写完整信息', 'error');
+        return;
+    }
+    
+    makeRequest('/api/comments', 'POST', { name, content }, function(data) {
+        if (data.success) {
+            showAlert('留言发表成功！', 'success');
+            document.getElementById('comment-form').reset();
+            currentPage = 0;
+            loadComments(currentPage);
+        } else {
+            showAlert(data.error || '留言发表失败', 'error');
+        }
+    });
+});
+
+// 页面加载时获取留言
+document.addEventListener('DOMContentLoaded', function() {
+    loadComments();
+});
+</script>
+{% endblock %}

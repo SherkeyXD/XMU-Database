@@ -1,0 +1,275 @@
+{% extends "base.html" %}
+
+{% block title %}教师控制台 - 学生成绩管理系统{% endblock %}
+
+{% block content %}
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- 功能菜单 -->
+    <div class="lg:col-span-1">
+        <div class="glass-effect rounded-2xl shadow-2xl p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-6">功能菜单</h3>
+            <div class="space-y-3">
+                <button id="manage-grades-btn" 
+                        class="w-full gradient-bg text-white py-3 px-4 rounded-lg font-semibold hover:shadow-lg transition-all duration-200 flex items-center justify-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                    </svg>
+                    成绩管理
+                </button>
+                
+                <button id="change-password-btn" 
+                        class="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold hover:shadow-lg transition-all duration-200 flex items-center justify-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-3.243a1 1 0 01.293-.707l5.964-5.964A6 6 0 1721 9z"></path>
+                    </svg>
+                    修改密码
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 主要内容区域 -->
+    <div class="lg:col-span-2">
+        <!-- 成绩管理区域 -->
+        <div id="grades-section" class="glass-effect rounded-2xl shadow-2xl p-6">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <svg class="w-6 h-6 mr-2 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                </svg>
+                成绩管理
+            </h3>
+            
+            <!-- 课程选择 -->
+            <div class="mb-6">
+                <label for="course-name" class="block text-sm font-medium text-gray-700 mb-2">课程名称</label>
+                <div class="flex space-x-3">
+                    <input type="text" id="course-name" placeholder="请输入课程名称"
+                           class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all">
+                    <button id="load-students-btn" 
+                            class="gradient-bg text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-200">
+                        加载学生
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 学生列表 -->
+            <div id="students-content">
+                <p class="text-gray-500 text-center py-8">请输入课程名称并点击"加载学生"</p>
+            </div>
+        </div>
+        
+        <!-- 修改密码区域 -->
+        <div id="password-section" class="glass-effect rounded-2xl shadow-2xl p-6 hidden">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <svg class="w-6 h-6 mr-2 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-3.243a1 1 0 01.293-.707l5.964-5.964A6 6 0 1721 9z"></path>
+                </svg>
+                修改密码
+            </h3>
+            <form id="password-form" class="space-y-4 max-w-md">
+                <div>
+                    <label for="old-password" class="block text-sm font-medium text-gray-700 mb-2">原密码</label>
+                    <input type="password" id="old-password" required
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all">
+                </div>
+                
+                <div>
+                    <label for="new-password" class="block text-sm font-medium text-gray-700 mb-2">新密码</label>
+                    <input type="password" id="new-password" required
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all">
+                </div>
+                
+                <button type="submit" 
+                        class="gradient-bg text-white py-3 px-6 rounded-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+                    修改密码
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- 成绩编辑模态框 -->
+<div id="grade-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+    <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
+        <h4 class="text-xl font-bold text-gray-800 mb-4">编辑成绩</h4>
+        <form id="grade-form">
+            <input type="hidden" id="edit-sno">
+            <input type="hidden" id="edit-course">
+            
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">学号</label>
+                <input type="text" id="edit-sno-display" readonly
+                       class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
+            </div>
+            
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">姓名</label>
+                <input type="text" id="edit-sname-display" readonly
+                       class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50">
+            </div>
+            
+            <div class="mb-6">
+                <label for="edit-grade" class="block text-sm font-medium text-gray-700 mb-2">成绩</label>
+                <input type="number" id="edit-grade" min="0" max="100" required
+                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all">
+            </div>
+            
+            <div class="flex space-x-3">
+                <button type="submit" 
+                        class="flex-1 gradient-bg text-white py-3 px-4 rounded-lg font-semibold hover:shadow-lg transition-all duration-200">
+                    保存
+                </button>
+                <button type="button" id="cancel-edit" 
+                        class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-3 px-4 rounded-lg font-semibold transition-all duration-200">
+                    取消
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let currentCourseName = '';
+
+// 切换显示区域
+function showSection(sectionId) {
+    document.getElementById('grades-section').classList.add('hidden');
+    document.getElementById('password-section').classList.add('hidden');
+    document.getElementById(sectionId).classList.remove('hidden');
+}
+
+// 成绩管理
+document.getElementById('manage-grades-btn').addEventListener('click', function() {
+    showSection('grades-section');
+});
+
+// 修改密码
+document.getElementById('change-password-btn').addEventListener('click', function() {
+    showSection('password-section');
+});
+
+// 加载学生列表
+document.getElementById('load-students-btn').addEventListener('click', function() {
+    const courseName = document.getElementById('course-name').value.trim();
+    
+    if (!courseName) {
+        showAlert('请输入课程名称', 'error');
+        return;
+    }
+    
+    currentCourseName = courseName;
+    
+    makeRequest(`/api/teacher/students?course_name=${encodeURIComponent(courseName)}`, 'GET', null, function(data) {
+        const studentsContent = document.getElementById('students-content');
+        
+        if (data.success && data.students.length > 0) {
+            let html = '<div class="overflow-x-auto"><table class="min-w-full bg-white rounded-lg overflow-hidden shadow-lg">';
+            html += '<thead class="gradient-bg text-white"><tr>';
+            html += '<th class="px-6 py-3 text-left font-semibold">学号</th>';
+            html += '<th class="px-6 py-3 text-left font-semibold">姓名</th>';
+            html += '<th class="px-6 py-3 text-left font-semibold">专业</th>';
+            html += '<th class="px-6 py-3 text-left font-semibold">成绩</th>';
+            html += '<th class="px-6 py-3 text-left font-semibold">操作</th>';
+            html += '</tr></thead><tbody>';
+            
+            data.students.forEach((student, index) => {
+                const bgColor = index % 2 === 0 ? 'bg-gray-50' : 'bg-white';
+                const gradeColor = student.igrade >= 90 ? 'text-green-600 font-bold' : 
+                                 student.igrade >= 80 ? 'text-blue-600 font-semibold' :
+                                 student.igrade >= 60 ? 'text-yellow-600' : 
+                                 student.igrade ? 'text-red-600 font-bold' : 'text-gray-500';
+                
+                html += `<tr class="${bgColor} hover:bg-gray-100 transition-colors">`;
+                html += `<td class="px-6 py-4">${student.sno}</td>`;
+                html += `<td class="px-6 py-4">${student.sname}</td>`;
+                html += `<td class="px-6 py-4">${student.smajor}</td>`;
+                html += `<td class="px-6 py-4 ${gradeColor}">${student.igrade || '未录入'}</td>`;
+                html += `<td class="px-6 py-4">
+                    <button onclick="editGrade('${student.sno}', '${student.sname}', ${student.igrade || 0})" 
+                            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                        编辑
+                    </button>
+                </td>`;
+                html += '</tr>';
+            });
+            
+            html += '</tbody></table></div>';
+            studentsContent.innerHTML = html;
+        } else {
+            studentsContent.innerHTML = '<p class="text-center text-gray-500 py-8">该课程暂无学生记录</p>';
+        }
+    });
+});
+
+// 编辑成绩
+function editGrade(sno, sname, grade) {
+    document.getElementById('edit-sno').value = sno;
+    document.getElementById('edit-course').value = currentCourseName;
+    document.getElementById('edit-sno-display').value = sno;
+    document.getElementById('edit-sname-display').value = sname;
+    document.getElementById('edit-grade').value = grade;
+    document.getElementById('grade-modal').classList.remove('hidden');
+}
+
+// 取消编辑
+document.getElementById('cancel-edit').addEventListener('click', function() {
+    document.getElementById('grade-modal').classList.add('hidden');
+});
+
+// 成绩表单提交
+document.getElementById('grade-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const sno = document.getElementById('edit-sno').value;
+    const courseName = document.getElementById('edit-course').value;
+    const grade = document.getElementById('edit-grade').value;
+    
+    makeRequest('/api/teacher/grade', 'POST', {
+        sno: sno,
+        course_name: courseName,
+        grade: parseInt(grade)
+    }, function(data) {
+        if (data.success) {
+            showAlert('成绩更新成功！', 'success');
+            document.getElementById('grade-modal').classList.add('hidden');
+            // 重新加载学生列表
+            document.getElementById('load-students-btn').click();
+        } else {
+            showAlert(data.message, 'error');
+        }
+    });
+});
+
+// 密码表单提交
+document.getElementById('password-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const oldPassword = document.getElementById('old-password').value;
+    const newPassword = document.getElementById('new-password').value;
+    
+    if (!oldPassword || !newPassword) {
+        showAlert('请填写完整信息', 'error');
+        return;
+    }
+    
+    makeRequest('/api/change_password', 'POST', {
+        old_password: oldPassword,
+        new_password: newPassword
+    }, function(data) {
+        if (data.success) {
+            showAlert('密码修改成功！', 'success');
+            document.getElementById('password-form').reset();
+        } else {
+            showAlert(data.message, 'error');
+        }
+    });
+});
+
+// 默认显示成绩管理区域
+document.addEventListener('DOMContentLoaded', function() {
+    showSection('grades-section');
+});
+</script>
+{% endblock %}
