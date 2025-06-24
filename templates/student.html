@@ -1,161 +1,261 @@
 {% extends "base.html" %}
-
-{% block title %}学生控制台 - 学生成绩管理系统{% endblock %}
+{% block title %}学生后台 - 学生成绩管理系统{% endblock %}
 
 {% block content %}
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-    <!-- 功能菜单 -->
-    <div class="lg:col-span-1">
-        <div class="glass-effect rounded-2xl shadow-2xl p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-6">功能菜单</h3>
-            <div class="space-y-3">
-                <button id="view-grades-btn" 
-                        class="w-full gradient-bg text-white py-3 px-4 rounded-lg font-semibold hover:shadow-lg transition-all duration-200 flex items-center justify-center">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                    </svg>
-                    查看成绩
-                </button>
-                
-                <button id="change-password-btn" 
-                        class="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold hover:shadow-lg transition-all duration-200 flex items-center justify-center">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-3.243a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
-                    </svg>
-                    修改密码
-                </button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- 主要内容区域 -->
-    <div class="lg:col-span-2">
-        <!-- 成绩查看区域 -->
-        <div id="grades-section" class="glass-effect rounded-2xl shadow-2xl p-6">
-            <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                <svg class="w-6 h-6 mr-2 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                </svg>
-                我的成绩
-            </h3>
-            <div id="grades-content">
-                <p class="text-gray-500 text-center py-8">点击"查看成绩"按钮获取成绩信息</p>
-            </div>
-        </div>
-        
-        <!-- 修改密码区域 -->
-        <div id="password-section" class="glass-effect rounded-2xl shadow-2xl p-6 hidden">
-            <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                <svg class="w-6 h-6 mr-2 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-3.243a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
-                </svg>
-                修改密码
-            </h3>
-            <form id="password-form" class="space-y-4 max-w-md">
-                <div>
-                    <label for="old-password" class="block text-sm font-medium text-gray-700 mb-2">原密码</label>
-                    <input type="password" id="old-password" required
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all">
+<div class="container mt-4">
+    <h2 class="mb-4">学生后台</h2>
+    <ul class="nav nav-tabs" id="studentTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="grade-tab" data-bs-toggle="tab" data-bs-target="#grade" type="button" role="tab">成绩查询</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="info-tab" data-bs-toggle="tab" data-bs-target="#info" type="button" role="tab">个人信息</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="password-tab" data-bs-toggle="tab" data-bs-target="#password" type="button" role="tab">修改密码</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="courses-tab" data-bs-toggle="tab" data-bs-target="#courses" type="button" role="tab">已修课程及学分</button>
+        </li>
+    </ul>
+    <div class="tab-content mt-3" id="studentTabContent">
+        <!-- 成绩查询 -->
+        <div class="tab-pane fade show active" id="grade" role="tabpanel">
+            <h4>成绩查询</h4>
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <input type="text" class="form-control" id="search_cno" placeholder="课程编号">
                 </div>
-                
-                <div>
-                    <label for="new-password" class="block text-sm font-medium text-gray-700 mb-2">新密码</label>
-                    <input type="password" id="new-password" required
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all">
+                <div class="col-md-3">
+                    <input type="text" class="form-control" id="search_term" placeholder="学期">
                 </div>
-                
-                <button type="submit" 
-                        class="gradient-bg text-white py-3 px-6 rounded-lg font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-200">
-                    修改密码
-                </button>
+                <div class="col-md-3">
+                    <button class="btn btn-primary w-100" id="searchGradeBtn">查询成绩</button>
+                </div>
+            </div>
+            <table class="table table-bordered" id="gradeTable" style="display:none;">  <!-- 表格默认隐藏 -->
+                <thead>
+                    <tr><th>学号</th><th>课程名称</th><th>课程编号</th><th>学期</th><th>成绩</th></tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <div id="noResultMsg" style="display:none;">暂无成绩信息</div> <!-- 提示消息：没有查询到成绩 -->
+        </div>
+        <!-- 个人信息 -->
+        <div class="tab-pane fade" id="info" role="tabpanel">
+            <h4>个人信息</h4>
+            <div id="studentInfoDisplay" class="mb-3">
+                <p><strong>学号:</strong> <span id="display_sno"></span></p>
+                <p><strong>姓名:</strong> <span id="display_sname"></span></p>
+                <p><strong>专业:</strong> <span id="display_smajor"></span></p>
+                <p><strong>班级:</strong> <span id="display_sclass"></span></p>
+                <p><strong>性别:</strong> <span id="display_sex"></span></p>
+                <p><strong>生日:</strong> <span id="display_birthday"></span></p>
+            </div>
+
+            <h5>修改信息</h5>
+            <form id="updateInfoForm" class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <input type="text" class="form-control" id="sname" placeholder="姓名" required>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" id="smajor" placeholder="专业" required>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" id="sclass" placeholder="班级">
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" id="sex" placeholder="性别">
+                </div>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" id="birthday" placeholder="生日">
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-success w-100">更新信息</button>
+                </div>
             </form>
+            <div id="infoMsg" class="text-danger mb-2"></div>
+        </div>
+
+        <!-- 修改密码 -->
+        <div class="tab-pane fade" id="password" role="tabpanel">
+            <h4>修改密码</h4>
+            <form id="changePwdForm" class="row g-3 mb-3" style="max-width:400px;">
+                <div class="col-12">
+                    <input type="password" class="form-control" id="oldPwd" placeholder="原密码" required>
+                </div>
+                <div class="col-12">
+                    <input type="password" class="form-control" id="newPwd" placeholder="新密码" required>
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-warning w-100">修改密码</button>
+                </div>
+            </form>
+            <div id="pwdMsg" class="text-danger"></div>
+        </div>
+
+        <!-- 已修课程及学分 -->
+        <div class="tab-pane fade" id="courses" role="tabpanel">
+            <h4>已修课程及学分</h4>
+            <table class="table table-bordered" id="coursesTable">
+                <thead><tr><th>课程编号</th><th>课程名称</th><th>学分</th><th>学期</th></tr></thead>
+                <tbody></tbody>
+            </table>
         </div>
     </div>
 </div>
-{% endblock %}
 
-{% block scripts %}
 <script>
-// 切换显示区域
-function showSection(sectionId) {
-    document.getElementById('grades-section').classList.add('hidden');
-    document.getElementById('password-section').classList.add('hidden');
-    document.getElementById(sectionId).classList.remove('hidden');
+// 成绩查询相关功能
+function loadGrades(cno = '', term = '') {
+    let sno = sessionStorage.getItem("student_sno"); // 获取学号
+
+    // 调用 API 获取成绩信息
+    fetch(`/api/student/grades?course_no=${cno}&term=${term}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+    }).then(r => r.json()).then(data => {
+        let html = '';
+        if (data.success && data.grades.length > 0) {
+            // 如果有成绩，填充表格
+            data.grades.forEach(g => {
+                let grade = g.grade == null ? '' : g.grade;
+                html += `<tr><td>${g.sno}</td><td>${g.cname}</td><td>${g.cno}</td><td>${g.term}</td><td>${grade}</td></tr>`;
+            });
+            // 显示表格
+            document.querySelector('#gradeTable tbody').innerHTML = html;
+            document.querySelector('#gradeTable').style.display = 'table'; // 显示表格
+            document.querySelector('#noResultMsg').style.display = 'none'; // 隐藏"暂无成绩信息"
+        } else {
+            // 没有成绩信息时，显示提示信息
+            document.querySelector('#gradeTable').style.display = 'none'; // 隐藏表格
+            document.querySelector('#noResultMsg').style.display = 'block'; // 显示"暂无成绩信息"
+        }
+    }).catch(error => {
+        console.error('Error fetching data:', error);
+        // 处理 API 错误或网络错误
+        document.querySelector('#gradeTable').style.display = 'none'; // 隐藏表格
+        document.querySelector('#noResultMsg').style.display = 'block'; // 显示"暂无成绩信息"
+    });
 }
 
-// 查看成绩
-document.getElementById('view-grades-btn').addEventListener('click', function() {
-    showSection('grades-section');
-    
-    makeRequest('/api/student/grades', 'GET', null, function(data) {
-        const gradesContent = document.getElementById('grades-content');
-        
-        if (data.success && data.grades.length > 0) {
-            let html = '<div class="overflow-x-auto"><table class="min-w-full bg-white rounded-lg overflow-hidden shadow-lg">';
-            html += '<thead class="gradient-bg text-white"><tr>';
-            html += '<th class="px-6 py-3 text-left font-semibold">学号</th>';
-            html += '<th class="px-6 py-3 text-left font-semibold">姓名</th>';
-            html += '<th class="px-6 py-3 text-left font-semibold">专业</th>';
-            html += '<th class="px-6 py-3 text-left font-semibold">课程</th>';
-            html += '<th class="px-6 py-3 text-left font-semibold">成绩</th>';
-            html += '</tr></thead><tbody>';
-            
-            data.grades.forEach((grade, index) => {
-                const bgColor = index % 2 === 0 ? 'bg-gray-50' : 'bg-white';
-                const gradeColor = grade.igrade >= 90 ? 'text-green-600 font-bold' : 
-                                 grade.igrade >= 80 ? 'text-blue-600 font-semibold' :
-                                 grade.igrade >= 60 ? 'text-yellow-600' : 'text-red-600 font-bold';
-                
-                html += `<tr class="${bgColor} hover:bg-gray-100 transition-colors">`;
-                html += `<td class="px-6 py-4">${grade.sno}</td>`;
-                html += `<td class="px-6 py-4">${grade.sname}</td>`;
-                html += `<td class="px-6 py-4">${grade.smajor}</td>`;
-                html += `<td class="px-6 py-4">${grade.cname}</td>`;
-                html += `<td class="px-6 py-4 ${gradeColor}">${grade.igrade || '未录入'}</td>`;
-                html += '</tr>';
-            });
-            
-            html += '</tbody></table></div>';
-            gradesContent.innerHTML = html;
-        } else {
-            gradesContent.innerHTML = '<p class="text-center text-gray-500 py-8">暂无成绩记录</p>';
+// 点击查询按钮后，获取课程编号和学期并触发成绩查询
+document.getElementById('searchGradeBtn').onclick = function () {
+    let cno = document.getElementById('search_cno').value.trim(),
+        term = document.getElementById('search_term').value.trim();
+    loadGrades(cno, term);
+    return false; // 防止表单提交刷新页面
+};
+
+// 查询学生信息并填充表单和直接显示信息
+function loadStudentInfo() {
+    let sno = sessionStorage.getItem("student_sno");
+
+    fetch('/api/student/get_info?student_sno=' + sno, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+    }).then(r => r.json()).then(data => {
+        if (data.success) {
+            // 显示信息
+            document.getElementById('display_sno').textContent = data.student.sno; 
+            document.getElementById('display_sname').textContent = data.student.sname;
+            document.getElementById('display_smajor').textContent = data.student.smajor;
+            document.getElementById('display_sclass').textContent = data.student.sclass || '';
+            document.getElementById('display_sex').textContent = data.student.sex || '';
+            document.getElementById('display_birthday').textContent = data.student.birthday || '';
+
+            // 填充表单
+            document.getElementById('sname').value = data.student.sname;
+            document.getElementById('smajor').value = data.student.smajor;
+            document.getElementById('sclass').value = data.student.sclass || '';
+            document.getElementById('sex').value = data.student.sex || '';
+            document.getElementById('birthday').value = data.student.birthday || '';
         }
     });
-});
+}
 
-// 修改密码
-document.getElementById('change-password-btn').addEventListener('click', function() {
-    showSection('password-section');
-});
+// 更新学生信息
+document.getElementById('updateInfoForm').onsubmit = function (e) {
+    e.preventDefault();
+    let sname = document.getElementById('sname').value.trim(),
+        smajor = document.getElementById('smajor').value.trim(),
+        sclass = document.getElementById('sclass').value.trim(),
+        sex = document.getElementById('sex').value.trim(),
+        birthday = document.getElementById('birthday').value.trim();
 
-// 密码表单提交
-document.getElementById('password-form').addEventListener('submit', function(e) {
+    let sno = sessionStorage.getItem("student_sno");
+
+    fetch('/api/student/update_info', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sno, sname, smajor, sclass, sex, birthday })
+    }).then(r => r.json()).then(data => {
+        if (data.success) {
+            alert('信息更新成功');
+            loadStudentInfo(); // 更新显示的个人信息
+        } else {
+            alert('信息更新失败：' + data.message);
+        }
+    });
+};
+
+// 查询已修课程及学分
+function loadCourses() {
+    let sno = sessionStorage.getItem("student_sno");
+
+    fetch(`/api/student/courses?student_sno=${sno}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+    }).then(r => r.json()).then(data => {
+        let html = '';
+        if (data.success && data.courses.length > 0) {
+            data.courses.forEach(course => {
+                html += `<tr><td>${course.cno}</td><td>${course.cname}</td><td>${course.credit}</td><td>${course.term}</td></tr>`;
+            });
+        } else {
+            html = `<tr><td colspan="4">暂无课程信息</td></tr>`;
+        }
+        document.querySelector('#coursesTable tbody').innerHTML = html;
+    });
+} 
+
+// 修改密码相关功能
+document.getElementById('changePwdForm').onsubmit = function (e) {
     e.preventDefault();
     
-    const oldPassword = document.getElementById('old-password').value;
-    const newPassword = document.getElementById('new-password').value;
-    
-    if (!oldPassword || !newPassword) {
-        showAlert('请填写完整信息', 'error');
+    // 获取输入的旧密码和新密码
+    let old_password = document.getElementById('oldPwd').value.trim();
+    let new_password = document.getElementById('newPwd').value.trim();
+
+    // 检查密码字段是否填写
+    if (!old_password || !new_password) {
+        document.getElementById('pwdMsg').innerText = '请填写完整的密码信息';
         return;
     }
-    
-    makeRequest('/api/change_password', 'POST', {
-        old_password: oldPassword,
-        new_password: newPassword
-    }, function(data) {
+
+    // 提交数据到后端API
+    fetch('/api/student/change_password', {  // 后端API路径可能需要根据实际情况修改
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ old_password, new_password })
+    })
+    .then(r => r.json())
+    .then(data => {
+        // 显示后端返回的消息
+        document.getElementById('pwdMsg').innerText = data.message;
         if (data.success) {
-            showAlert('密码修改成功！', 'success');
-            document.getElementById('password-form').reset();
-        } else {
-            showAlert(data.message, 'error');
+            alert('密码修改成功');
+            // 你可以考虑清除表单或者进行其他操作
         }
     });
-});
+};
 
-// 默认显示成绩区域
-document.addEventListener('DOMContentLoaded', function() {
-    showSection('grades-section');
-});
+
+
+
+// 初始化加载成绩、学生信息及已修课程
+loadGrades();
+loadStudentInfo();
+loadCourses();
 </script>
 {% endblock %}
