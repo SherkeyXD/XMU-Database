@@ -437,14 +437,14 @@ class DatabaseManager:
                 .all()
             )
             return comments
-        except Exception as e:
+        except Exception:
             return []
 
     def get_comments_count(self):
         try:
             count = self.session.query(Comment).count()
             return count
-        except Exception as e:
+        except Exception:
             return 0
 
     def close(self):
