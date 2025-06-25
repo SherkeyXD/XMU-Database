@@ -2,252 +2,430 @@
 {% block title %}管理员后台 - 学生成绩管理系统{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h2 class="mb-4">管理员后台</h2>
-    <ul class="nav nav-tabs" id="adminTab" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="course-tab" data-bs-toggle="tab" data-bs-target="#course" type="button" role="tab">课程管理</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="teacher-tab" data-bs-toggle="tab" data-bs-target="#teacher" type="button" role="tab">教师管理</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="student-tab" data-bs-toggle="tab" data-bs-target="#student" type="button" role="tab">学生管理</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="grade-tab" data-bs-toggle="tab" data-bs-target="#grade" type="button" role="tab">成绩查询</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="password-tab" data-bs-toggle="tab" data-bs-target="#password" type="button" role="tab">修改密码</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="adminuser-tab" data-bs-toggle="tab" data-bs-target="#adminuser" type="button" role="tab">管理员管理</button>
-        </li>
-    </ul>
-    <div class="tab-content mt-3" id="adminTabContent">
+<div class="glass-effect rounded-2xl shadow-xl p-6 mx-auto max-w-7xl">
+    <h2 class="text-3xl font-bold text-gray-800 mb-6">管理员后台</h2>
+    
+    <!-- Tab Navigation -->
+    <div class="flex flex-wrap border-b border-gray-200 mb-6" id="adminTab">
+        <button class="tab-button active" data-target="course" id="course-tab">课程管理</button>
+        <button class="tab-button" data-target="teacher" id="teacher-tab">教师管理</button>
+        <button class="tab-button" data-target="student" id="student-tab">学生管理</button>
+        <button class="tab-button" data-target="grade" id="grade-tab">成绩查询</button>
+        <button class="tab-button" data-target="password" id="password-tab">修改密码</button>
+        <button class="tab-button" data-target="adminuser" id="adminuser-tab">管理员管理</button>
+    </div>
+    
+    <div id="adminTabContent">
         <!-- 课程管理 -->
-        <div class="tab-pane fade show active" id="course" role="tabpanel">
-            <h4>课程管理</h4>
-            <form id="addCourseForm" class="row g-3 mb-3">
-                <div class="col-md-2">
-                    <input type="text" class="form-control" id="cno" placeholder="课程编号" required>
+        <div class="tab-content active" id="course">
+            <h4 class="text-2xl font-semibold text-gray-700 mb-4">课程管理</h4>
+            <form id="addCourseForm" class="grid grid-cols-1 md:grid-cols-6 gap-4 mb-6 p-4 bg-gray-50 rounded-lg">
+                <div>
+                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" id="cno" placeholder="课程编号" required>
                 </div>
-                <div class="col-md-2">
-                    <input type="text" class="form-control" id="cname" placeholder="课程名称" required>
+                <div>
+                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" id="cname" placeholder="课程名称" required>
                 </div>
-                <div class="col-md-2">
-                    <input type="number" class="form-control" id="credit" placeholder="学分" required>
+                <div>
+                    <input type="number" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" id="credit" placeholder="学分" required>
                 </div>
-                <div class="col-md-2">
-                    <input type="text" class="form-control" id="course_tno" placeholder="授课教师工号" required>
+                <div>
+                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" id="course_tno" placeholder="授课教师工号" required>
                 </div>
-                <div class="col-md-2">
-                    <input type="text" class="form-control" id="course_term" placeholder="学期" required>
+                <div>
+                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" id="course_term" placeholder="学期" required>
                 </div>
-                <div class="col-md-2">
-                    <button type="submit" class="btn btn-success w-100">添加课程</button>
+                <div>
+                    <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md transition-colors">添加课程</button>
                 </div>
             </form>
-            <div id="courseMsg" class="text-danger mb-2"></div>
-            <table class="table table-bordered" id="courseTable">
-                <thead><tr><th>课程编号</th><th>课程名称</th><th>学分</th><th>教师工号</th><th>学期</th><th>操作</th></tr></thead>
-                <tbody></tbody>
-            </table>
+            <div id="courseMsg" class="text-red-600 mb-4"></div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border border-gray-200 rounded-lg" id="courseTable">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b">课程编号</th>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b">课程名称</th>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b">学分</th>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b">教师工号</th>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b">学期</th>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
         </div>
         <!-- 教师管理 -->
-        <div class="tab-pane fade" id="teacher" role="tabpanel">
-            <h4>教师管理</h4>
-            <form id="addTeacherForm" class="row g-3 mb-3">
-                <div class="col-md-2">
-                    <input type="text" class="form-control" id="tno" placeholder="工号" required>
+        <div class="tab-content hidden" id="teacher">
+            <h4 class="text-2xl font-semibold text-gray-700 mb-4">教师管理</h4>
+            <form id="addTeacherForm" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 p-4 bg-gray-50 rounded-lg">
+                <div>
+                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" id="tno" placeholder="工号" required>
                 </div>
-                <div class="col-md-3">
-                    <input type="text" class="form-control" id="tname" placeholder="姓名" required>
+                <div>
+                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" id="tname" placeholder="姓名" required>
                 </div>
-                <div class="col-md-3">
-                    <input type="text" class="form-control" id="tdept" placeholder="院系/部门">
+                <div>
+                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" id="tdept" placeholder="院系/部门">
                 </div>
-                <div class="col-md-2">
-                    <button type="submit" class="btn btn-success w-100">添加教师</button>
+                <div>
+                    <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md transition-colors">添加教师</button>
                 </div>
             </form>
-            <div id="teacherMsg" class="text-danger mb-2"></div>
-            <table class="table table-bordered" id="teacherTable">
-                <thead><tr><th>工号</th><th>姓名</th><th>院系</th><th>操作</th></tr></thead>
-                <tbody></tbody>
-            </table>
+            <div id="teacherMsg" class="text-red-600 mb-4"></div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border border-gray-200 rounded-lg" id="teacherTable">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b">工号</th>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b">姓名</th>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b">院系</th>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
         </div>
         <!-- 学生管理 -->
-        <div class="tab-pane fade" id="student" role="tabpanel">
-            <h4>学生管理</h4>
-            <form id="addStudentForm" class="row g-3 mb-3">
-                <div class="col-md-2">
-                    <input type="text" class="form-control" id="sno" placeholder="学号" required>
+        <div class="tab-content hidden" id="student">
+            <h4 class="text-2xl font-semibold text-gray-700 mb-4">学生管理</h4>
+            <form id="addStudentForm" class="grid grid-cols-1 md:grid-cols-7 gap-4 mb-6 p-4 bg-gray-50 rounded-lg">
+                <div>
+                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" id="sno" placeholder="学号" required>
                 </div>
-                <div class="col-md-2">
-                    <input type="text" class="form-control" id="sname" placeholder="姓名" required>
+                <div>
+                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" id="sname" placeholder="姓名" required>
                 </div>
-                <div class="col-md-2">
-                    <input type="text" class="form-control" id="smajor" placeholder="专业" required>
+                <div>
+                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" id="smajor" placeholder="专业" required>
                 </div>
-                <div class="col-md-2">
-                    <input type="text" class="form-control" id="sclass" placeholder="班级">
+                <div>
+                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" id="sclass" placeholder="班级">
                 </div>
-                <div class="col-md-1">
-                    <input type="text" class="form-control" id="sex" placeholder="性别">
+                <div>
+                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" id="sex" placeholder="性别">
                 </div>
-                <div class="col-md-1">
-                    <input type="text" class="form-control" id="birthday" placeholder="生日">
+                <div>
+                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" id="birthday" placeholder="生日">
                 </div>
-                <div class="col-md-2">
-                    <button type="submit" class="btn btn-success w-100">添加学生</button>
+                <div>
+                    <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md transition-colors">添加学生</button>
                 </div>
             </form>
-            <div id="studentMsg" class="text-danger mb-2"></div>
-            <table class="table table-bordered" id="studentTable">
-                <thead><tr><th>学号</th><th>姓名</th><th>专业</th><th>班级</th><th>性别</th><th>生日</th><th>操作</th></tr></thead>
-                <tbody></tbody>
-            </table>
+            <div id="studentMsg" class="text-red-600 mb-4"></div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border border-gray-200 rounded-lg" id="studentTable">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b">学号</th>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b">姓名</th>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b">专业</th>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b">班级</th>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b">性别</th>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b">生日</th>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
         </div>
         <!-- 成绩查询 -->
-        <div class="tab-pane fade" id="grade" role="tabpanel">
-            <h4>学生成绩查询</h4>
-            <div class="row mb-3">
-                <div class="col-md-3">
-                    <input type="text" class="form-control" id="search_sno" placeholder="学号">
+        <div class="tab-content hidden" id="grade">
+            <h4 class="text-2xl font-semibold text-gray-700 mb-4">学生成绩查询</h4>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 p-4 bg-gray-50 rounded-lg">
+                <div>
+                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" id="search_sno" placeholder="学号">
                 </div>
-                <div class="col-md-3">
-                    <input type="text" class="form-control" id="search_cno" placeholder="课程编号">
+                <div>
+                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" id="search_cno" placeholder="课程编号">
                 </div>
-                <div class="col-md-3">
-                    <input type="text" class="form-control" id="search_term" placeholder="学期">
+                <div>
+                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" id="search_term" placeholder="学期">
                 </div>
-                <div class="col-md-3">
-                    <button class="btn btn-primary w-100" id="searchGradeBtn">查询成绩</button>
+                <div>
+                    <button class="w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition-colors" id="searchGradeBtn">查询成绩</button>
                 </div>
             </div>
-            <table class="table table-bordered" id="gradeTable">
-                <thead><tr><th>成绩ID</th><th>学号</th><th>课程编号</th><th>学期</th><th>成绩</th></tr></thead>
-                <tbody></tbody>
-            </table>
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border border-gray-200 rounded-lg" id="gradeTable">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b">成绩ID</th>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b">学号</th>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b">课程编号</th>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b">学期</th>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b">成绩</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
         </div>
         <!-- 修改密码 -->
-        <div class="tab-pane fade" id="password" role="tabpanel">
-            <h4>修改管理员密码</h4>
-            <form id="changePwdForm" class="row g-3 mb-3" style="max-width:400px;">
-                <div class="col-12">
-                    <input type="password" class="form-control" id="oldPwd" placeholder="原密码" required>
+        <div class="tab-content hidden" id="password">
+            <h4 class="text-2xl font-semibold text-gray-700 mb-4">修改管理员密码</h4>
+            <form id="changePwdForm" class="max-w-md space-y-4 p-4 bg-gray-50 rounded-lg">
+                <div>
+                    <input type="password" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" id="oldPwd" placeholder="原密码" required>
                 </div>
-                <div class="col-12">
-                    <input type="password" class="form-control" id="newPwd" placeholder="新密码" required>
+                <div>
+                    <input type="password" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" id="newPwd" placeholder="新密码" required>
                 </div>
-                <div class="col-12">
-                    <button type="submit" class="btn btn-warning w-100">修改密码</button>
+                <div>
+                    <button type="submit" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md transition-colors">修改密码</button>
                 </div>
             </form>
-            <div id="pwdMsg" class="text-danger"></div>
+            <div id="pwdMsg" class="text-red-600 mt-4"></div>
         </div>
         <!-- 管理员管理 -->
-        <div class="tab-pane fade" id="adminuser" role="tabpanel">
-            <h4>管理员管理</h4>
-            <form id="addAdminForm" class="row g-3 mb-3">
-                <div class="col-md-3">
-                    <input type="text" class="form-control" id="ano" placeholder="管理员编号" required>
+        <div class="tab-content hidden" id="adminuser">
+            <h4 class="text-2xl font-semibold text-gray-700 mb-4">管理员管理</h4>
+            <form id="addAdminForm" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 p-4 bg-gray-50 rounded-lg">
+                <div>
+                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" id="ano" placeholder="管理员编号" required>
                 </div>
-                <div class="col-md-3">
-                    <input type="text" class="form-control" id="aname" placeholder="姓名" required>
+                <div>
+                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" id="aname" placeholder="姓名" required>
                 </div>
-                <div class="col-md-3">
-                    <input type="password" class="form-control" id="apassword" placeholder="初始密码（可选，默认编号/123456）">
+                <div>
+                    <input type="password" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" id="apassword" placeholder="初始密码（可选，默认编号/123456）">
                 </div>
-                <div class="col-md-3">
-                    <button type="submit" class="btn btn-success w-100">添加管理员</button>
+                <div>
+                    <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md transition-colors">添加管理员</button>
                 </div>
             </form>
-            <div id="adminMsg" class="text-danger mb-2"></div>
-            <table class="table table-bordered" id="adminTable">
-                <thead><tr><th>编号</th><th>姓名</th><th>操作</th></tr></thead>
-                <tbody></tbody>
-            </table>
+            <div id="adminMsg" class="text-red-600 mb-4"></div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border border-gray-200 rounded-lg" id="adminTable">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b">编号</th>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b">姓名</th>
+                            <th class="px-4 py-3 text-left text-sm font-medium text-gray-700 border-b">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
 
 <!-- 课程编辑模态框 -->
-<div class="modal fade" id="editCourseModal" tabindex="-1">
-  <div class="modal-dialog">
-    <form class="modal-content" id="editCourseForm">
-      <div class="modal-header"><h5 class="modal-title">编辑课程</h5></div>
-      <div class="modal-body">
-        <input type="hidden" id="edit_cno">
-        <div class="mb-3"><label>课程名称</label><input type="text" class="form-control" id="edit_cname" required></div>
-        <div class="mb-3"><label>学分</label><input type="number" class="form-control" id="edit_credit" required></div>
-        <div class="mb-3"><label>教师工号</label><input type="text" class="form-control" id="edit_tno" required></div>
-        <div class="mb-3"><label>学期</label><input type="text" class="form-control" id="edit_term" required></div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-        <button type="submit" class="btn btn-primary">保存修改</button>
-      </div>
-    </form>
-  </div>
+<div class="fixed inset-0 bg-black bg-opacity-50 hidden z-50" id="editCourseModal">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
+            <form id="editCourseForm">
+                <div class="p-6 border-b border-gray-200">
+                    <h5 class="text-lg font-semibold text-gray-900">编辑课程</h5>
+                </div>
+                <div class="p-6 space-y-4">
+                    <input type="hidden" id="edit_cno">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">课程名称</label>
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" id="edit_cname" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">学分</label>
+                        <input type="number" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" id="edit_credit" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">教师工号</label>
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" id="edit_tno" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">学期</label>
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" id="edit_term" required>
+                    </div>
+                </div>
+                <div class="p-6 border-t border-gray-200 flex justify-end space-x-3">
+                    <button type="button" class="px-4 py-2 text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors" onclick="closeModal('editCourseModal')">取消</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md transition-colors">保存修改</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 <!-- 教师编辑模态框 -->
-<div class="modal fade" id="editTeacherModal" tabindex="-1">
-  <div class="modal-dialog">
-    <form class="modal-content" id="editTeacherForm">
-      <div class="modal-header"><h5 class="modal-title">编辑教师</h5></div>
-      <div class="modal-body">
-        <input type="hidden" id="edit_tno_info">
-        <div class="mb-3"><label>姓名</label><input type="text" class="form-control" id="edit_tname" required></div>
-        <div class="mb-3"><label>院系/部门</label><input type="text" class="form-control" id="edit_tdept"></div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-        <button type="submit" class="btn btn-primary">保存修改</button>
-      </div>
-    </form>
-  </div>
+<div class="fixed inset-0 bg-black bg-opacity-50 hidden z-50" id="editTeacherModal">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
+            <form id="editTeacherForm">
+                <div class="p-6 border-b border-gray-200">
+                    <h5 class="text-lg font-semibold text-gray-900">编辑教师</h5>
+                </div>
+                <div class="p-6 space-y-4">
+                    <input type="hidden" id="edit_tno_info">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">姓名</label>
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" id="edit_tname" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">院系/部门</label>
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" id="edit_tdept">
+                    </div>
+                </div>
+                <div class="p-6 border-t border-gray-200 flex justify-end space-x-3">
+                    <button type="button" class="px-4 py-2 text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors" onclick="closeModal('editTeacherModal')">取消</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md transition-colors">保存修改</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 <!-- 学生编辑模态框 -->
-<div class="modal fade" id="editStudentModal" tabindex="-1">
-  <div class="modal-dialog">
-    <form class="modal-content" id="editStudentForm">
-      <div class="modal-header"><h5 class="modal-title">编辑学生</h5></div>
-      <div class="modal-body">
-        <input type="hidden" id="edit_sno">
-        <div class="mb-3"><label>姓名</label><input type="text" class="form-control" id="edit_sname" required></div>
-        <div class="mb-3"><label>专业</label><input type="text" class="form-control" id="edit_smajor" required></div>
-        <div class="mb-3"><label>班级</label><input type="text" class="form-control" id="edit_sclass"></div>
-        <div class="mb-3"><label>性别</label><input type="text" class="form-control" id="edit_sex"></div>
-        <div class="mb-3"><label>生日</label><input type="text" class="form-control" id="edit_birthday"></div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-        <button type="submit" class="btn btn-primary">保存修改</button>
-      </div>
-    </form>
-  </div>
+<div class="fixed inset-0 bg-black bg-opacity-50 hidden z-50" id="editStudentModal">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
+            <form id="editStudentForm">
+                <div class="p-6 border-b border-gray-200">
+                    <h5 class="text-lg font-semibold text-gray-900">编辑学生</h5>
+                </div>
+                <div class="p-6 space-y-4">
+                    <input type="hidden" id="edit_sno">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">姓名</label>
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" id="edit_sname" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">专业</label>
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" id="edit_smajor" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">班级</label>
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" id="edit_sclass">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">性别</label>
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" id="edit_sex">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">生日</label>
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" id="edit_birthday">
+                    </div>
+                </div>
+                <div class="p-6 border-t border-gray-200 flex justify-end space-x-3">
+                    <button type="button" class="px-4 py-2 text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors" onclick="closeModal('editStudentModal')">取消</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md transition-colors">保存修改</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
+<style>
+.tab-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #6b7280;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+.tab-button:hover {
+    color: #374151;
+    border-bottom-color: #d1d5db;
+}
+.tab-button.active {
+    color: #667eea;
+    border-bottom-color: #667eea;
+}
+.tab-content {
+    margin-top: 1.5rem;
+}
+.tab-content.hidden {
+    display: none;
+}
+.tab-content.active {
+    display: block;
+}
+</style>
+
 <script>
+// Tab 功能
+document.addEventListener('DOMContentLoaded', function() {
+    // 标签页切换功能
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const target = this.getAttribute('data-target');
+            
+            // 移除所有活动状态
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+                content.classList.add('hidden');
+            });
+            
+            // 设置当前活动状态
+            this.classList.add('active');
+            const targetContent = document.getElementById(target);
+            if (targetContent) {
+                targetContent.classList.remove('hidden');
+                targetContent.classList.add('active');
+            }
+        });
+    });
+});
+
+// 模态框功能
+function showModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
+}
+
+// 点击模态框背景关闭
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('fixed') && e.target.classList.contains('inset-0')) {
+        const modalId = e.target.getAttribute('id');
+        if (modalId) {
+            closeModal(modalId);
+        }
+    }
+});
+
 // 课程管理
 function loadCourses() {
     fetch('/api/admin/get_courses').then(r=>r.json()).then(data=>{
         let html = '';
         data.courses.forEach(c=>{
-            html += `<tr><td>${c.cno}</td><td>${c.cname}</td><td>${c.credit}</td><td>${c.tno}</td><td>${c.term||''}</td>
-            <td>
-                <button class='btn btn-sm btn-primary' onclick="showEditCourse('${c.cno}','${c.cname}','${c.credit}','${c.tno}','${c.term||''}')">编辑</button>
-                <button class='btn btn-sm btn-danger' onclick="deleteCourse('${c.cno}')">删除</button>
-            </td></tr>`;
+            html += `<tr class="border-b hover:bg-gray-50">
+                <td class="px-4 py-3 text-sm text-gray-900">${c.cno}</td>
+                <td class="px-4 py-3 text-sm text-gray-900">${c.cname}</td>
+                <td class="px-4 py-3 text-sm text-gray-900">${c.credit}</td>
+                <td class="px-4 py-3 text-sm text-gray-900">${c.tno}</td>
+                <td class="px-4 py-3 text-sm text-gray-900">${c.term||''}</td>
+                <td class="px-4 py-3 text-sm space-x-2">
+                    <button class='px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white text-xs rounded transition-colors' onclick="showEditCourse('${c.cno}','${c.cname}','${c.credit}','${c.tno}','${c.term||''}')">编辑</button>
+                    <button class='px-3 py-1 bg-red-500 hover:bg-red-600 text-white text-xs rounded transition-colors' onclick="deleteCourse('${c.cno}')">删除</button>
+                </td>
+            </tr>`;
         });
         document.querySelector('#courseTable tbody').innerHTML = html;
     });
 }
 function deleteCourse(cno) {
-    fetch('/api/admin/delete_course', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cno})})
-    .then(r=>r.json()).then(data=>{loadCourses();alert(data.message);});
+    if (confirm('确定要删除这门课程吗？')) {
+        fetch('/api/admin/delete_course', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cno})})
+        .then(r=>r.json()).then(data=>{loadCourses();showAlert(data.message, data.success ? 'success' : 'error');});
+    }
 }
 document.getElementById('addCourseForm').onsubmit = function(e){
     e.preventDefault();
@@ -265,9 +443,10 @@ document.getElementById('addCourseForm').onsubmit = function(e){
     .then(data => {
         if(data.success){
             loadCourses();
-            alert('添加成功');
+            this.reset();
+            showAlert('添加成功', 'success');
         } else {
-            alert('添加失败：' + data.message);
+            showAlert('添加失败：' + data.message, 'error');
         }
         document.getElementById('courseMsg').innerText = data.message;
     });
@@ -278,7 +457,7 @@ function showEditCourse(cno, cname, credit, tno, term) {
     document.getElementById('edit_credit').value = credit;
     document.getElementById('edit_tno').value = tno;
     document.getElementById('edit_term').value = term;
-    new bootstrap.Modal(document.getElementById('editCourseModal')).show();
+    showModal('editCourseModal');
 }
 document.getElementById('editCourseForm').onsubmit = function(e){
     e.preventDefault();
@@ -295,8 +474,8 @@ document.getElementById('editCourseForm').onsubmit = function(e){
     .then(r=>r.json())
     .then(data=>{
         loadCourses();
-        alert(data.message);
-        bootstrap.Modal.getInstance(document.getElementById('editCourseModal')).hide();
+        showAlert(data.message, data.success ? 'success' : 'error');
+        closeModal('editCourseModal');
     });
 };
 loadCourses();
@@ -306,18 +485,24 @@ function loadTeachers() {
     fetch('/api/admin/get_teachers').then(r=>r.json()).then(data=>{
         let html = '';
         data.teachers.forEach(t=>{
-            html += `<tr><td>${t.tno}</td><td>${t.tname}</td><td>${t.tdept||''}</td>
-            <td>
-                <button class='btn btn-sm btn-primary' onclick="showEditTeacher('${t.tno}','${t.tname}','${t.tdept||''}')">编辑</button>
-                <button class='btn btn-sm btn-danger' onclick="deleteTeacher('${t.tno}')">删除</button>
-            </td></tr>`;
+            html += `<tr class="border-b hover:bg-gray-50">
+                <td class="px-4 py-3 text-sm text-gray-900">${t.tno}</td>
+                <td class="px-4 py-3 text-sm text-gray-900">${t.tname}</td>
+                <td class="px-4 py-3 text-sm text-gray-900">${t.tdept||''}</td>
+                <td class="px-4 py-3 text-sm space-x-2">
+                    <button class='px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white text-xs rounded transition-colors' onclick="showEditTeacher('${t.tno}','${t.tname}','${t.tdept||''}')">编辑</button>
+                    <button class='px-3 py-1 bg-red-500 hover:bg-red-600 text-white text-xs rounded transition-colors' onclick="deleteTeacher('${t.tno}')">删除</button>
+                </td>
+            </tr>`;
         });
         document.querySelector('#teacherTable tbody').innerHTML = html;
     });
 }
 function deleteTeacher(tno) {
-    fetch('/api/admin/delete_teacher', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({tno})})
-    .then(r=>r.json()).then(data=>{loadTeachers();alert(data.message);});
+    if (confirm('确定要删除这位教师吗？')) {
+        fetch('/api/admin/delete_teacher', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({tno})})
+        .then(r=>r.json()).then(data=>{loadTeachers();showAlert(data.message, data.success ? 'success' : 'error');});
+    }
 }
 document.getElementById('addTeacherForm').onsubmit = function(e){
     e.preventDefault();
@@ -333,22 +518,23 @@ document.getElementById('addTeacherForm').onsubmit = function(e){
     .then(data => {
         if(data.success){
             loadTeachers();
-            alert('添加成功');
+            this.reset();
+            showAlert('添加成功', 'success');
         } else {
-            alert('添加失败：' + data.message);
+            showAlert('添加失败：' + data.message, 'error');
         }
         document.getElementById('teacherMsg').innerText = data.message;
     });
 };
 function showEditTeacher(tno, tname, tdept) {
-    document.getElementById('edit_tno').value = tno;
+    document.getElementById('edit_tno_info').value = tno;
     document.getElementById('edit_tname').value = tname;
     document.getElementById('edit_tdept').value = tdept;
-    new bootstrap.Modal(document.getElementById('editTeacherModal')).show();
+    showModal('editTeacherModal');
 }
 document.getElementById('editTeacherForm').onsubmit = function(e){
     e.preventDefault();
-    let tno = document.getElementById('edit_tno').value;
+    let tno = document.getElementById('edit_tno_info').value;
     let tname = document.getElementById('edit_tname').value;
     let tdept = document.getElementById('edit_tdept').value;
     fetch('/api/admin/update_teacher', {
@@ -359,8 +545,8 @@ document.getElementById('editTeacherForm').onsubmit = function(e){
     .then(r=>r.json())
     .then(data=>{
         loadTeachers();
-        alert(data.message);
-        bootstrap.Modal.getInstance(document.getElementById('editTeacherModal')).hide();
+        showAlert(data.message, data.success ? 'success' : 'error');
+        closeModal('editTeacherModal');
     });
 };
 loadTeachers();
@@ -370,18 +556,27 @@ function loadStudents() {
     fetch('/api/admin/get_students').then(r=>r.json()).then(data=>{
         let html = '';
         data.students.forEach(s=>{
-            html += `<tr><td>${s.sno}</td><td>${s.sname}</td><td>${s.smajor}</td><td>${s.sclass||''}</td><td>${s.sex||''}</td><td>${s.birthday||''}</td>
-            <td>
-                <button class='btn btn-sm btn-primary' onclick="showEditStudent('${s.sno}','${s.sname}','${s.smajor}','${s.sclass||''}','${s.sex||''}','${s.birthday||''}')">编辑</button>
-                <button class='btn btn-sm btn-danger' onclick="deleteStudent('${s.sno}')">删除</button>
-            </td></tr>`;
+            html += `<tr class="border-b hover:bg-gray-50">
+                <td class="px-4 py-3 text-sm text-gray-900">${s.sno}</td>
+                <td class="px-4 py-3 text-sm text-gray-900">${s.sname}</td>
+                <td class="px-4 py-3 text-sm text-gray-900">${s.smajor}</td>
+                <td class="px-4 py-3 text-sm text-gray-900">${s.sclass||''}</td>
+                <td class="px-4 py-3 text-sm text-gray-900">${s.sex||''}</td>
+                <td class="px-4 py-3 text-sm text-gray-900">${s.birthday||''}</td>
+                <td class="px-4 py-3 text-sm space-x-2">
+                    <button class='px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white text-xs rounded transition-colors' onclick="showEditStudent('${s.sno}','${s.sname}','${s.smajor}','${s.sclass||''}','${s.sex||''}','${s.birthday||''}')">编辑</button>
+                    <button class='px-3 py-1 bg-red-500 hover:bg-red-600 text-white text-xs rounded transition-colors' onclick="deleteStudent('${s.sno}')">删除</button>
+                </td>
+            </tr>`;
         });
         document.querySelector('#studentTable tbody').innerHTML = html;
     });
 }
 function deleteStudent(sno) {
-    fetch('/api/admin/delete_student', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sno})})
-    .then(r=>r.json()).then(data=>{loadStudents();alert(data.message);});
+    if (confirm('确定要删除这位学生吗？')) {
+        fetch('/api/admin/delete_student', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sno})})
+        .then(r=>r.json()).then(data=>{loadStudents();showAlert(data.message, data.success ? 'success' : 'error');});
+    }
 }
 document.getElementById('addStudentForm').onsubmit = function(e){
     e.preventDefault();
@@ -400,9 +595,10 @@ document.getElementById('addStudentForm').onsubmit = function(e){
     .then(data => {
         if(data.success){
             loadStudents();
-            alert('添加成功');
+            this.reset();
+            showAlert('添加成功', 'success');
         } else {
-            alert('添加失败：' + data.message);
+            showAlert('添加失败：' + data.message, 'error');
         }
         document.getElementById('studentMsg').innerText = data.message;
     });
@@ -414,7 +610,7 @@ function showEditStudent(sno, sname, smajor, sclass, sex, birthday) {
     document.getElementById('edit_sclass').value = sclass;
     document.getElementById('edit_sex').value = sex;
     document.getElementById('edit_birthday').value = birthday;
-    new bootstrap.Modal(document.getElementById('editStudentModal')).show();
+    showModal('editStudentModal');
 }
 document.getElementById('editStudentForm').onsubmit = function(e){
     e.preventDefault();
@@ -432,8 +628,8 @@ document.getElementById('editStudentForm').onsubmit = function(e){
     .then(r=>r.json())
     .then(data=>{
         loadStudents();
-        alert(data.message);
-        bootstrap.Modal.getInstance(document.getElementById('editStudentModal')).hide();
+        showAlert(data.message, data.success ? 'success' : 'error');
+        closeModal('editStudentModal');
     });
 };
 loadStudents();
@@ -444,25 +640,44 @@ function loadGrades(sno='',cno='',term='') {
         let html = '';
         data.grades.forEach(g=>{
             if((!sno||g.sno==sno)&&(!cno||g.cno==cno)&&(!term||g.term==term)){
-                html += `<tr><td>${g.id}</td><td>${g.sno}</td><td>${g.cno}</td><td>${g.term}</td><td>${g.grade==null?'':g.grade}</td></tr>`;
+                html += `<tr class="border-b hover:bg-gray-50">
+                    <td class="px-4 py-3 text-sm text-gray-900">${g.id}</td>
+                    <td class="px-4 py-3 text-sm text-gray-900">${g.sno}</td>
+                    <td class="px-4 py-3 text-sm text-gray-900">${g.cno}</td>
+                    <td class="px-4 py-3 text-sm text-gray-900">${g.term}</td>
+                    <td class="px-4 py-3 text-sm text-gray-900">${g.grade==null?'':g.grade}</td>
+                </tr>`;
             }
         });
         document.querySelector('#gradeTable tbody').innerHTML = html;
     });
 }
 document.getElementById('searchGradeBtn').onclick = function(){
-    let sno = document.getElementById('search_sno').value.trim(), cno = search_cno.value.trim(), term = search_term.value.trim();
+    let sno = document.getElementById('search_sno').value.trim();
+    let cno = document.getElementById('search_cno').value.trim();
+    let term = document.getElementById('search_term').value.trim();
     loadGrades(sno,cno,term);
     return false;
 };
 loadGrades();
 
 // 修改密码
-changePwdForm.onsubmit = function(e){
+document.getElementById('changePwdForm').onsubmit = function(e){
     e.preventDefault();
-    let old_password = oldPwd.value.trim(), new_password = newPwd.value.trim();
-    fetch('/api/admin/change_password', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({old_password,new_password})})
-    .then(r=>r.json()).then(data=>{pwdMsg.innerText=data.message;});
+    let old_password = document.getElementById('oldPwd').value.trim();
+    let new_password = document.getElementById('newPwd').value.trim();
+    fetch('/api/admin/change_password', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({old_password,new_password})
+    })
+    .then(r=>r.json()).then(data=>{
+        document.getElementById('pwdMsg').innerText = data.message;
+        showAlert(data.message, data.success ? 'success' : 'error');
+        if (data.success) {
+            this.reset();
+        }
+    });
 };
 
 // 管理员管理
@@ -470,62 +685,81 @@ function loadAdmins() {
     fetch('/api/admin/get_admins').then(r=>r.json()).then(data=>{
         let html = '';
         data.admins.forEach(a=>{
-            html += `<tr><td>${a.ano}</td><td>${a.aname}</td>
-            <td>
-                <button class='btn btn-sm btn-primary' onclick="showEditAdmin('${a.ano}','${a.aname}')">编辑</button>
-                <button class='btn btn-sm btn-danger' onclick="deleteAdmin('${a.ano}')">删除</button>
-            </td></tr>`;
+            html += `<tr class="border-b hover:bg-gray-50">
+                <td class="px-4 py-3 text-sm text-gray-900">${a.ano}</td>
+                <td class="px-4 py-3 text-sm text-gray-900">${a.aname}</td>
+                <td class="px-4 py-3 text-sm space-x-2">
+                    <button class='px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white text-xs rounded transition-colors' onclick="showEditAdmin('${a.ano}','${a.aname}')">编辑</button>
+                    <button class='px-3 py-1 bg-red-500 hover:bg-red-600 text-white text-xs rounded transition-colors' onclick="deleteAdmin('${a.ano}')">删除</button>
+                </td>
+            </tr>`;
         });
         document.querySelector('#adminTable tbody').innerHTML = html;
     });
 }
 function deleteAdmin(ano) {
-    fetch('/api/admin/delete_admin', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ano})})
-    .then(r=>r.json()).then(data=>{
-        if(data.success){
-            loadAdmins();
-            alert('操作成功');
-        }else{
-            alert(data.message);
-        }
-        adminMsg.innerText = data.message;
-    });
+    if (confirm('确定要删除这位管理员吗？')) {
+        fetch('/api/admin/delete_admin', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ano})})
+        .then(r=>r.json()).then(data=>{
+            if(data.success){
+                loadAdmins();
+                showAlert('操作成功', 'success');
+            }else{
+                showAlert(data.message, 'error');
+            }
+            document.getElementById('adminMsg').innerText = data.message;
+        });
+    }
 }
 document.getElementById('addAdminForm').onsubmit = function(e){
     e.preventDefault();
-    let ano = document.getElementById('ano').value.trim(), aname = aname.value.trim(), password = apassword.value.trim();
+    let ano = document.getElementById('ano').value.trim();
+    let aname = document.getElementById('aname').value.trim();
+    let password = document.getElementById('apassword').value.trim();
     let body = {ano, aname};
     if(password) body.password = password;
     fetch('/api/admin/add_admin', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
     .then(r=>r.json()).then(data=>{
         if(data.success){
             loadAdmins();
-            alert('操作成功');
+            this.reset();
+            showAlert('操作成功', 'success');
         }else{
-            alert(data.message);
+            showAlert(data.message, 'error');
         }
-        adminMsg.innerText = data.message;
+        document.getElementById('adminMsg').innerText = data.message;
     });
 };
+
 // 编辑管理员模态框
 function showEditAdmin(ano, aname) {
     if(!document.getElementById('editAdminModal')){
         let modalHtml = `
-        <div class="modal fade" id="editAdminModal" tabindex="-1">
-          <div class="modal-dialog">
-            <form class="modal-content" id="editAdminForm">
-              <div class="modal-header"><h5 class="modal-title">编辑管理员</h5></div>
-              <div class="modal-body">
-                <input type="hidden" id="edit_ano">
-                <div class="mb-3"><label>姓名</label><input type="text" class="form-control" id="edit_aname" required></div>
-                <div class="mb-3"><label>新密码（可选）</label><input type="password" class="form-control" id="edit_apassword"></div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                <button type="submit" class="btn btn-primary">保存修改</button>
-              </div>
-            </form>
-          </div>
+        <div class="fixed inset-0 bg-black bg-opacity-50 hidden z-50" id="editAdminModal">
+            <div class="flex items-center justify-center min-h-screen p-4">
+                <div class="bg-white rounded-lg shadow-xl w-full max-w-md">
+                    <form id="editAdminForm">
+                        <div class="p-6 border-b border-gray-200">
+                            <h5 class="text-lg font-semibold text-gray-900">编辑管理员</h5>
+                        </div>
+                        <div class="p-6 space-y-4">
+                            <input type="hidden" id="edit_ano">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">姓名</label>
+                                <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" id="edit_aname" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">新密码（可选）</label>
+                                <input type="password" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" id="edit_apassword">
+                            </div>
+                        </div>
+                        <div class="p-6 border-t border-gray-200 flex justify-end space-x-3">
+                            <button type="button" class="px-4 py-2 text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors" onclick="closeModal('editAdminModal')">取消</button>
+                            <button type="submit" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md transition-colors">保存修改</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>`;
         document.body.insertAdjacentHTML('beforeend', modalHtml);
         document.getElementById('editAdminForm').onsubmit = function(e){
@@ -544,18 +778,18 @@ function showEditAdmin(ano, aname) {
             .then(data=>{
                 if(data.success){
                     loadAdmins();
-                    alert('操作成功');
+                    showAlert('操作成功', 'success');
                 }else{
-                    alert(data.message);
+                    showAlert(data.message, 'error');
                 }
-                bootstrap.Modal.getInstance(document.getElementById('editAdminModal')).hide();
+                closeModal('editAdminModal');
             });
         };
     }
     document.getElementById('edit_ano').value = ano;
     document.getElementById('edit_aname').value = aname;
     document.getElementById('edit_apassword').value = '';
-    new bootstrap.Modal(document.getElementById('editAdminModal')).show();
+    showModal('editAdminModal');
 }
 loadAdmins();
 </script>
