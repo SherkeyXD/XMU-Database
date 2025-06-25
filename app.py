@@ -1,9 +1,12 @@
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 from database import DatabaseManager, Course, Grade, Student
 from datetime import datetime, timedelta
+import uuid
+
 
 app = Flask(__name__)
-app.secret_key = "your-secret-key-here"  # 在生产环境中使用随机密钥
+app.secret_key = uuid.uuid4().hex  # 使用随机生成的密钥
+
 
 # 初始化数据库
 db = DatabaseManager()
